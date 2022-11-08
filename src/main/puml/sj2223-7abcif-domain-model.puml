@@ -1,0 +1,94 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+
+
+entity Course{
+    - courseName : String
+    - creationDate : LocalDateTime
+    - UpdatedDate:  LocalDateTime
+    - duration : Integer
+    - courseTeacher : CourseTeacher
+    - category : Category
+    - courseStatus : CourseStatus
+
+
+}
+
+enum CourseStatus {
+    AVAILABLE
+    IN_PROGRESS
+    DELETED
+
+}
+
+
+entity CourseTeacher extends Person{
+
+    - email : String
+    - address : Address
+
+
+}
+
+abstract Person{
+    - firstName : String
+    - lastName : String
+    - phoneNumber : PhoneNumber
+}
+
+class Address <<(V,#FF7700) value-object>>
+{
+    - streetNumber : String
+    - zipCode : String
+    - city : String
+    - country : Country
+}
+
+entity Country {
+    - name : String
+    - iso2Code : String
+}
+
+entity Admin extends Person{
+    - adminLevels : AdminLevel
+}
+
+enum Category{
+    NETWORKING
+    PROGRAMMING
+    DEVOPS
+    CLOUD
+}
+
+class PhoneNumber <<(V, #FF7700) Value-object>>{
+    - countryCode : Integer
+    - areaCode : Integer
+    - serialNumber : String
+}
+
+entity User extends Person{
+    - UserName : String
+    - courses : Course
+}
+
+enum AdminLevel {
+    MANAGING_USERS
+    CONTENT_EDITOR
+}
+
+CourseTeacher "0..1" *-- "0..n" Course
+
+CourseTeacher -- "0..1" Address : address
+Course "0..n" o..o "0..m" User
+Country -- "0..1" Address
+Person -- "0..1" PhoneNumber
+Course --> Category
+Admin --> AdminLevel
+
+Course -- "0..1" CourseStatus
+
+
+
+@enduml
